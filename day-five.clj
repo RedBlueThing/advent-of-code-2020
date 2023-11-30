@@ -14,6 +14,8 @@
                     "FFFBBBFRRR"
                     "BBFFBBFRLL"])
 
+(def real-data-raw (str/split-lines (slurp "day-five.txt")))
+
 (def test-data-expected-seat-id [357, 567, 119, 820])
 
 (defn split-seat-data [seat-data]
@@ -58,7 +60,3 @@
         max-val (last sorted-ids-for-missing-seats)
         full-range (range min-val (inc max-val))]
     (filter #(not (contains? (set sorted-ids-for-missing-seats) %)) full-range)))
-
-(def real-data-raw (str/split-lines (slurp "day-five.txt")))
-
-
