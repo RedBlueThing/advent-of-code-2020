@@ -31,9 +31,9 @@
         ;; remove " bag" and " bags" from our contains-bags
         contains-bags (filter some? (map (fn process-contained-bag [bag-string]
                                            (if (= bag-string "no other bags")
-                               ;; no other bags?
+                                             ;; no other bags?
                                              nil
-                               ;; some other bags
+                                             ;; some other bags
                                              (let [bag-components (str/split bag-string #" ")
                                                    number (Integer/parseInt (first bag-components))
                                                    names (str/join " " (-> bag-components rest butlast))]
