@@ -1,6 +1,7 @@
 
 (require '[clojure.string :as str])
 (require '[clojure.math.combinatorics :as combo])
+(require '[clojure.set :as set])
 
 ;; where F means "front", B means "back", L means "left", and R means "right"
 ;;
@@ -42,8 +43,21 @@
 (defn seat-id-for-row-column [row column]
   (+ (* row 8) column))
 
+(defn set-of-all-seat-row-columns [rows columns]
+  (into #{} (mapcat conj (for [row (range 0 rows)] (for [column (range 0 columns)] [row columns])))))
+
 (defn part-one-solution [data]
   (apply max(map (fn [command-row] (apply seat-id-for-row-column (apply row-column-for-commands (split-seat-data command-row)))) data)))
+
+(defn part-two-solution [data]
+  (let [set-of-assigned-seats (into #{} (map (fn [command-row] (apply row-column-for-commands (split-seat-data command-row))) data))
+        set-of-missing-seats (set/difference (set-of-all-seat-row-columns rows columns) set-of-assigned-seats)
+        ids-for-missing-seats (map (fn [[row column]] (seat-id-for-row-column row column)) set-of-assigned-seats)
+        sorted-ids-for-missing-seats (sort ids-for-missing-seats)
+        min-val (first sorted-ids-for-missing-seats)
+        max-val (last sorted-ids-for-missing-seats)
+        full-range (range min-val (inc max-val))]
+    (filter #(not (contains? (set sorted-ids-for-missing-seats) %)) full-range)))
 
 (def real-data-raw (str/split-lines (slurp "day-five.txt")))
 
